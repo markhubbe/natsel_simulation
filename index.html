@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Evolutionary simulations</title>
+        
+        <style>
+            /* applies the outer box as the dimension limits for all containers in the page */
+            * {
+            box-sizing: border-box;
+            font-family: Verdana;
+            }
+    
+            body{
+                width: 780px;
+                margin: 0.5vh auto;
+            }
+    
+            /* general box configs where all html inputs will be */
+            .inputbox{
+                border-radius: 25px;
+                height: 200px;
+                width: 100%;
+                z-index: 1;
+                top: 0;
+                left: 0;
+                background-color: rgb(148, 148, 148);
+                /* overflow-x: hidden; */
+                padding: 0.5%;
+                
+            }
+            
+            /* Create columns that floats next to each other */
+            .column {
+            float: left;
+            height: 190px;
+            padding-left: 1%;
+            padding-right: 1%;
+            }
+            
+            /* Clear floats after the columns */
+            .inputbox:after {
+            content: "";
+            display: table;
+            clear: both;
+            }
+            
+            /* CSS for slidebars */
+            input[type=range] {
+            height: 45px;
+           
+            margin: 10px 0;
+            width: 100%;
+            background-color: transparent;
+            }
+    
+            input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            border-radius: 25px;
+            border: 1px solid white;
+            }
+
+            #allele_slide {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: linear-gradient(to right, #D55E00 0%, #D55E00 60%, #fff 60%, #fff 100%);
+            border: 1px solid white;
+            border-radius: 25px;
+            outline: none;
+            margin: 10px 0;
+            -webkit-appearance: none;
+            }
+
+            #sAA_slide {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: linear-gradient(to right, #D55E00 0%, #D55E00 50%, #fff 50%, #fff 100%);
+            border: 1px solid white;
+            border-radius: 25px;
+            outline: none;
+            margin: 10px 0;
+            -webkit-appearance: none;
+            }
+
+            #sAa_slide {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: linear-gradient(to right, #D55E00 0%, #D55E00 50%, #fff 50%, #fff 100%);
+            border: 1px solid white;
+            border-radius: 25px;
+            outline: none;
+            margin: 10px 0;
+            -webkit-appearance: none;
+            }
+
+            #saa_slide {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: linear-gradient(to right, #D55E00 0%, #D55E00 50%, #fff 50%, #fff 100%);
+            border: 1px solid white;
+            border-radius: 25px;
+            outline: none;
+            margin: 10px 0;
+            -webkit-appearance: none;
+            }
+    
+            input[type=range]::-webkit-slider-thumb {
+            box-shadow: 0px 0px 0px #000000;
+            border: 0px solid #000000;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #D55E00;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -7px;
+            }
+    
+            input[type=range]:hover::-webkit-slider-thumb {
+            background: #793400;
+            }
+            
+            /* CSS for number input boxes */
+            input.rounded{
+            width:60px;
+            text-align: center;
+            border: 0px solid white;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            padding: 2px;
+            outline: 0;
+            text-align: center;
+            -webkit-appearance: none;
+            }
+    
+            p{
+                font-size: 16px;
+                padding: 4px;
+                border: 0;
+                margin: 0;
+            }
+                        
+            /* CSS for Genotype value spans*/
+            .span_box{
+                font-size: 16px;
+                padding: 2px 10px;
+                background-color: rgb(209, 209, 209);
+                border-radius: 10px;
+            }
+            
+            /* CSS for buttons */
+            button{
+                font-size: 16px;
+                width: 50%;
+                border-radius: 10px;
+                background-color: #D55E00;
+                color: white;
+                text-align: center;
+                border-color: #D55E00;
+                border-style: solid;
+            }
+            
+            button:hover{
+                background-color:#793400;
+                border-color: #793400;
+            }
+    
+            button:active{
+                background-color:#aa6631;
+                border-color: #aa6631;
+            }
+            
+            /* CSS for radio button */
+            input[type=radio]{
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                transform: translateY(4px)
+            }
+    
+            input[type=radio]:checked{
+                -webkit-appearance: none;
+                width: 17px;
+                height: 17px;
+                background-color:#D55E00;
+                border-radius: 50%;
+            }
+    
+            /* CSS for floating help boxes */
+            .tooltip {
+            position: relative;
+            display: inline-block;
+            border: 2px solid rgb(32, 32, 32);
+            border-radius: 14px;
+            background-color: rgb(32, 32, 32);
+            color:white;
+            padding: 0px 5px;
+            font-size: 14px;
+            }
+    
+            .tooltip .tooltiptext {
+            visibility:hidden;
+            opacity: 0;
+            width: 300px;
+            background-color: rgb(59, 59, 59);
+            color: #fff;
+            text-align: left;
+            border-radius: 10px;
+            padding: 10px;
+            transition-property: opacity;
+            transition-duration: 0.7s;
+            transition-delay: 0.2s;
+            font-size: 14px;
+                
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1002;
+            top: -5px;
+           
+            }
+    
+            .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 100;
+            }
+    
+        </style>
+    </head>
+    
+    <body>
+        <div class="inputbox">
+        <div class="column" style="background-color:transparent; width: 50%; border-right: 4px; border-right-color: white; border-right-style: solid;">
+            <p><b>Allele Frequency: </b> <span class="tooltip"> ?
+                <span class="tooltiptext" style="left: 120%"><strong> Select the allele frequency: </strong> <br>
+                    The total number of copies of alleles in a population is twice the number of individuals, since each individual has two copies of the same gene (with the expection of portions of the sexual chromosomes). 
+                    In any population reproducing freely and randomly, the frequency of gene alleles in the population will define the frequency of genotypes of individuals.  
+                    </span>
+                </span>
+                </p>
+            <table style="width:100%; ">
+                <tr>
+                    <td style="text-align:right ; width:28%"> <p style="font-size: 16px;"><strong> <span id="Atxt">A<sub>1</sub> </span></strong><input type="number" class="rounded" name="" id="pA" step=0.01 min=0 max=1 value = 0.6></p></td>
+                    <td style="text-align:center ; width:44%">
+                        <input type="range" id="allele_slide" min="0" max="1" value="0.6" step = "0.01">
+                    </td>
+                    <td style="text-align:left ; width:28%"><p style="font-size: 16px;"><input type="number" class="rounded" name="" id="pa" step=0.01 min=0 max=1 value = 0.4> <strong> <span id="atxt"> A<sub>2</sub></span></strong></p></td>
+                </tr>
+    
+            </table>
+            <p> </p>
+            <p><b>Population size: </b><input type="number" class = "rounded" name="" id="pop" step=1 min=0 max=1000, value = 300> <span class="tooltip"> ?
+                <span class="tooltiptext" style="left: 120%"><strong> Select the size of the population: </strong> <br>
+                    In this simple simulation, population size only changes the animations shown, since we assume individuals reproduce exactly at the same rate and randomly. <br>
+                    However, in real populations, size can change the frequency of genotypes through genetic drift, assortative mating, genetic linkage, or other recombination biases. <br>
+                    This results in smaller populations showing more variation in allele frequency between generations.  
+                    </span>
+                </span> </p>
+            <p> </p>
+            <p><b>Allele dominance: </b><input type="radio" id="yes" name="dom_radio" value = "true">
+                <label for="yes">Yes</label>
+                <input type="radio" id="no" name="dom_radio" value = "false" checked>
+                <label for="no">No</label>
+                <span class="tooltip"> ?
+                    <span class="tooltiptext" style="left: 120%"><strong> Is there allele dominance? </strong> <br>
+                        If one allele is dominant, it masks the expression of the recessive allele, causing heterozygous individuals to have the same phenotype as the the dominant homozygous. 
+                        In this case, we represent alleles as <i>A</i> and <i>a</i>, with the uppercase allele representing the dominant type.<br>
+                        When there is co-dominance of alleles, heterozygous individuals have a phenotype that is distinct from both types of homozygous.
+                        In this case, we represent alleles as <i>A<sub>1</sub></i> and <i>A<sub>2</sub></i>, to show that are expressing themselves equally in the phenotype.
+                        </span>
+                    </span>
+            </p>
+            <p> </p>
+            <table style="width:100%;">
+                <tr>
+                    <td style="text-align:center"><button type = "button" id="run_btn">Start</button></td>
+                    <td style="text-align:center"><button type = "button" id="next_gen">Next gen</button></td>
+                </tr>
+            </table>  
+            
+        </div>
+        <div class="column" style="background-color:transparent; width: 50%;">
+            <table style="width:100%">
+                <tr>
+                    <td style="text-align: center ; width: 50%"> <p ><b>Genotype Frequency </b>
+                        <span class="tooltip"> ?
+                        <span class="tooltiptext" style="right: 120%"><strong> Genotype frequencies: </strong> <br>
+                            In populations reproducing freely and randomly, the frequency of genotypes in the population is calculated as
+                            f(AA)=p<sup>2</sup>; f(Aa) = 2*p*q; and f(aa) = q<sup>2</sup>, where p is their frequency of allele 1, and q is the frequency of allele 2.  
+                            </span>
+                        </span></p></td>
+                    
+                        <td colspan="2" style="text-align: right ; width:50%"> <p><b>Relative Fitness</b> <span class="tooltip"> ?
+                        <span class="tooltiptext" style="right: 120%"><strong> Relative Fitness: </strong> <br>
+                            The relative fitness of a phenotype is the relative chance of individuals leaving copies of their DNA in the next generation, when compared to individuals showing other phenotypes.<br>
+                            Relative fitness takes into account the chance that individuals will survive until reproductive age, the number of offspring that individual has, and the chance that their offspring will survive in the next generartion.<br>
+                            For example, in this simple simulation, a genotype with a relative fitness of 0.8 will leave twice as many copies of their genes than a genotype with fitness 0.4.     
+                            </span>
+                        </span></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right ; width:45%"> <p style="font-size: 16px;"><strong><span id="AAtxt">A<sub>1</sub>A<sub>1</sub>: </span></strong> <span id = "pAA" class="span_box">  0.360  </span></p></td>
+                    <td style="text-align:center ; width:35%">
+                        <input type="range" id="sAA_slide" min="0" max="1" valule="0.5" step = "0.01">
+                    </td >
+                    <td style="text-align:right ; width:20%"><input type="number" class = "rounded" name="" id="sAA" step=0.1 min=0 max=1, value = 0.5></td>
+                </tr>
+                <tr>
+                    <td style="text-align:right ; width:45%"> <p style="font-size: 16px;"><strong><span id="Aatxt">A<sub>1</sub>A<sub>2</sub>: </span></strong> <span id = "pAa" class="span_box">  0.480  </span></p></td>
+                    <td style="text-align:center ; width:35%">
+                        <input type="range" id="sAa_slide" min="0" max="1" valule="0.5" step = "0.01">
+                    </td >
+                    <td style="text-align:right ; width:20%"><input type="number" class = "rounded" name="" id="sAa" step=0.1 min=0 max=1, value = 0.5></td>
+                </tr>
+                <tr>
+                    <td style="text-align:right ; width:45%"> <p style="font-size: 16px;"><strong><span id="aatxt">A<sub>2</sub>A<sub>2</sub>: </span></strong> <span id = "paa" class="span_box">  0.160  </span></p></td>
+                    <td style="text-align:center ; width:35%">
+                        <input type="range" id="saa_slide" min="0" max="1" valule="0.5" step = "0.01">
+                    </td >
+                    <td style="text-align:right ; width:20%"><input type="number" class = "rounded" name="" id="saa" step=0.1 min=0 max=1, value = 0.5></td>
+                </tr>
+            </table>
+                
+        </div>
+        </div>
+        
+    <div class="main">
+        <canvas id="layer1" style="z-index: 1;
+        position:absolute; 
+        margin:auto;
+        
+        top:220px">
+        </canvas>
+        <canvas id="layer2" style = "z-index: 2;
+        position:absolute; 
+        margin:auto;
+        top:220px"></canvas>
+
+        <canvas id="layer3" style = "z-index: 3;
+        position:absolute; 
+        margin:auto;
+        top:820px"></canvas>
+
+        <script src="evo_sim.js"></script>
+    </div>
+</body>
+</html>
